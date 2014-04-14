@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 08-04-2014
+# Date : 14-04-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -23,11 +23,13 @@ FICHIER_SCRIPTS_MySQL_LOCAL=sauvegarde_mysql_local.sh
 FICHIER_SCRIPTS_MySQL_RESEAU=sauvegarde_mysql_reseau.sh
 FICHIER_SCRIPTS_MySQL_FTP=sauvegarde_mysql_ftp.sh
 FICHIER_SCRIPTS_MySQL_FTPS=sauvegarde_mysql_ftps.sh
+FICHIER_SCRIPTS_MySQL_SFTP=sauvegarde_mysql_sftp.sh
 
 FICHIER_PURGE_MySQL_LOCAL=purge_mysql_local.sh
 FICHIER_PURGE_MySQL_RESEAU=purge_mysql_reseau.sh
 FICHIER_PURGE_MySQL_FTP=purge_mysql_ftp.sh
 FICHIER_PURGE_MySQL_FTPS=purge_mysql_ftps.sh
+FICHIER_PURGE_MySQL_SFTP=purge_mysql_sftp.sh
 
 REPERTOIRE_CRON=/etc/cron.d
 FICHIER_CRON_SAUVEGARDE=sauvegarde_mysql
@@ -78,6 +80,19 @@ if [ -f /sbin/mount.cifs ] ; then
 	CLIENT_SMB=cifs
 fi
 
+
+#############################################################################
+# Fonction Lecture Nombre Aleatoire
+#############################################################################
+
+lecture_nombre_aleatoire()
+{
+
+MAXIMUM=10000
+MINIMUM=10
+NOMBRE_ALEATOIRE=$[($RANDOM % ($[$MAXIMUM - $MINIMUM] + 1)) + $MINIMUM]
+
+}
 
 #############################################################################
 # Fonction Lecture Fichier Configuration Gestion Centraliser Sauvegarde
@@ -255,6 +270,24 @@ if [ "$VAR15" = "OUI" ] &&
 	if [ "$cron_sauvegarde_ftps" = "oui" ] ; then
 
 	creation_script_sauvegarde_ftps
+
+	fi
+
+	cat <<- EOF > $fichtemp
+	select cron_activer
+	from sauvegarde_sftp
+	where uname='`uname -n`' and application='mysql' ;
+	EOF
+
+	mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/cron-sauvegarde-sftp.txt
+
+	cron_sauvegarde_sftp=$(sed '$!d' /tmp/cron-sauvegarde-sftp.txt)
+	rm -f /tmp/cron-sauvegarde-sftp.txt
+	rm -f $fichtemp
+
+	if [ "$cron_sauvegarde_sftp" = "oui" ] ; then
+
+	creation_script_sauvegarde_sftp
 
 	fi
 fi
@@ -964,6 +997,154 @@ fi
 
 
 cat <<- EOF > $fichtemp
+select serveur
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-serveur.txt
+
+lecture_serveur=$(sed '$!d' /tmp/lecture-serveur.txt)
+rm -f /tmp/lecture-serveur.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select port
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-port.txt
+
+lecture_port=$(sed '$!d' /tmp/lecture-port.txt)
+rm -f /tmp/lecture-port.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select utilisateur
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-utilisateur.txt
+
+lecture_utilisateur=$(sed '$!d' /tmp/lecture-utilisateur.txt)
+rm -f /tmp/lecture-utilisateur.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select password
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-password.txt
+
+lecture_password=$(sed '$!d' /tmp/lecture-password.txt)
+rm -f /tmp/lecture-password.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select heures
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-heures.txt
+
+lecture_heures=$(sed '$!d' /tmp/lecture-heures.txt)
+rm -f /tmp/lecture-heures.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select minutes
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-minutes.txt
+
+lecture_minutes=$(sed '$!d' /tmp/lecture-minutes.txt)
+rm -f /tmp/lecture-minutes.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select jours
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-jours.txt
+
+lecture_jours=$(sed '$!d' /tmp/lecture-jours.txt)
+rm -f /tmp/lecture-jours.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select retentions
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-retentions.txt
+
+lecture_retentions=$(sed '$!d' /tmp/lecture-retentions.txt)
+rm -f /tmp/lecture-retentions.txt
+rm -f $fichtemp
+
+
+if [ "$lecture_serveur" = "" ] ; then
+	REF70=192.168.4.10
+else
+	REF70=$lecture_serveur
+fi
+
+if [ "$lecture_port" = "" ] ; then
+	REF71=22
+else
+	REF71=$lecture_port
+fi
+
+if [ "$lecture_utilisateur" = "" ] ; then
+	REF72=admin
+else
+	REF72=$lecture_utilisateur
+fi
+
+if [ "$lecture_password" = "" ] ; then
+	REF73=admin
+else
+	REF73=$lecture_password
+fi
+
+if [ "$lecture_heures" = "" ] ; then
+	REF74=21
+else
+	REF74=$lecture_heures
+fi
+
+if [ "$lecture_minutes" = "" ] ; then
+	REF75=30
+else
+	REF75=$lecture_minutes
+fi
+
+if [ "$lecture_jours" = "" ] ; then
+	REF76=1-7
+else
+	REF76=$lecture_jours
+fi
+
+if [ "$lecture_retentions" = "" ] ; then
+	REF77=31
+	REF78=00
+else
+	REF77=$lecture_retentions
+	REF78=$lecture_retentions
+fi
+
+
+cat <<- EOF > $fichtemp
 select cron_activer
 from sauvegarde_local
 where uname='`uname -n`' and application='mysql' ;
@@ -1012,6 +1193,19 @@ rm -f /tmp/lecture-cron-ftps.txt
 rm -f $fichtemp
 
 
+cat <<- EOF > $fichtemp
+select cron_activer
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-cron-sftp.txt
+
+lecture_cron_sftp=$(sed '$!d' /tmp/lecture-cron-sftp.txt)
+rm -f /tmp/lecture-cron-sftp.txt
+rm -f $fichtemp
+
+
 if [ "$lecture_cron_local" = "" ] ; then
 	lecture_cron_local=non
 fi
@@ -1026,6 +1220,10 @@ fi
 
 if [ "$lecture_cron_ftps" = "" ] ; then
 	lecture_cron_ftps=non
+fi
+
+if [ "$lecture_cron_sftp" = "" ] ; then
+	lecture_cron_sftp=non
 fi
 
 
@@ -1077,6 +1275,18 @@ lecture_erreur_ftps=$(sed '$!d' /tmp/lecture-erreur-ftps.txt)
 rm -f /tmp/lecture-erreur-ftps.txt
 rm -f $fichtemp
 
+cat <<- EOF > $fichtemp
+select erreur
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-erreur-sftp.txt
+
+lecture_erreur_sftp=$(sed '$!d' /tmp/lecture-erreur-sftp.txt)
+rm -f /tmp/lecture-erreur-sftp.txt
+rm -f $fichtemp
+
 
 if [ "$lecture_erreur_local" = "" ] ; then
 	lecture_erreur_local=oui
@@ -1094,6 +1304,10 @@ if [ "$lecture_erreur_ftps" = "" ] ; then
 	lecture_erreur_ftps=oui
 fi
 
+if [ "$lecture_erreur_sftp" = "" ] ; then
+	lecture_erreur_sftp=oui
+fi
+
 }
 
 #############################################################################
@@ -1107,6 +1321,7 @@ RETENTION_MySQL_LOCAL='`date +%d-%m-%Y --date '"'$REF34 days ago'"'`'
 RETENTION_MySQL_RESEAU='`date +%d-%m-%Y --date '"'$REF47 days ago'"'`'
 RETENTION_MySQL_FTP='`date +%d-%m-%Y --date '"'$REF58 days ago'"'`'
 RETENTION_MySQL_FTPS='`date +%d-%m-%Y --date '"'$REF68 days ago'"'`'
+RETENTION_MySQL_SFTP='`date +%d.%m.%y --date '"'$REF77 days ago'"'`'
 
 }
 
@@ -1783,7 +1998,7 @@ lecture_valeurs_retentions
 
 if [ "$nombre_bases_lister" = "1" ] ; then
 echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "mkdir -p $TMP_FTPS/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 if [ "$REF22" = "mysql" ] ; then
 	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2012,7 +2227,7 @@ echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mdelete *.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "rmdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2025,6 +2240,210 @@ rm -f $fichtemp
 fi
 
 chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+
+}
+
+#############################################################################
+# Fonction Creation Script Sauvegarde SFTP
+#############################################################################
+
+creation_script_sauvegarde_sftp()
+{
+
+lecture_valeurs_base_donnees
+lecture_valeurs_retentions
+lecture_nombre_aleatoire
+
+
+if [ "$nombre_bases_lister" = "1" ] ; then
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+if [ "$REF22" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+echo "cd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "tar cfvz MySQL-`uname -n`-$DATE_HEURE.tgz *.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "touch MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "sshpass -p $REF73 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $REF71 $REF72@$REF70<<transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+
+if [ "$nombre_bases_lister" = "2" ] ; then
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+if [ "$REF22" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+if [ "$REF23" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+echo "cd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "tar cfvz MySQL-`uname -n`-$DATE_HEURE.tgz *.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "touch MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "sshpass -p $REF73 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $REF71 $REF72@$REF70<<transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+
+if [ "$nombre_bases_lister" = "3" ] ; then
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+if [ "$REF22" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+if [ "$REF23" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+if [ "$REF24" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+echo "cd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "tar cfvz MySQL-`uname -n`-$DATE_HEURE.tgz *.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "touch MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "sshpass -p $REF73 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $REF71 $REF72@$REF70<<transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+
+if [ "$nombre_bases_lister" = "4" ] ; then
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+if [ "$REF22" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+fi
+
+if [ "$REF23" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+if [ "$REF24" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+if [ "$REF25" = "mysql" ] ; then
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+else
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+echo "cd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "tar cfvz MySQL-`uname -n`-$DATE_HEURE.tgz *.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "touch MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "sshpass -p $REF73 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $REF71 $REF72@$REF70<<transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+fi
+
+
+if [ "$nombre_bases_lister" -ge "5" ] ; then
+
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+cat <<- EOF > $fichtemp
+select base
+from sauvegarde_bases
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-bases.txt
+
+sed -i '1d' /tmp/lecture-bases.txt
+
+nombres_lignes=$(sed -n '$=' /tmp/lecture-bases.txt)
+
+
+num=1
+while [ "$num" -le $nombres_lignes ] 
+	do	
+	NOM_BASE=$(sed -n "$num"p /tmp/lecture-bases.txt)
+	
+	if [ "$NOM_BASE" = "mysql" ] ; then	
+		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+	else
+		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases > $TMP/$NOMBRE_ALEATOIRE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+	fi
+
+	num=`expr $num + 1`
+	done
+
+
+echo "cd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "tar cfvz MySQL-`uname -n`-$DATE_HEURE.tgz *.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "touch MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "sshpass -p $REF73 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $REF71 $REF72@$REF70<<transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "transfert-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+rm -f /tmp/lecture-bases.txt
+rm -f $fichtemp
+
+fi
+
+chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
 
 }
 
@@ -2061,19 +2480,19 @@ rm -f /tmp/lecture-purges.txt
 rm -f $fichtemp
 
 
-REF70=$lecture_retentions
-REF71=$lecture_purges
+REF80=$lecture_retentions
+REF81=$lecture_purges
 
 
-if [ "$REF71" != "0" ] ; then
-if [ "$REF70" -le "$REF71" ] ; then
+if [ "$REF81" != "0" ] ; then
+if [ "$REF80" -le "$REF81" ] ; then
 
-REF71=`expr $REF71 + 1`
+REF81=`expr $REF81 + 1`
 
-while [ "$REF70" != "$REF71" ] 
+while [ "$REF80" != "$REF81" ] 
 do
-PURGE='`date +%d-%m-%Y --date '"'$REF70 days ago'"'`'
-REF70=`expr $REF70 + 1`
+PURGE='`date +%d-%m-%Y --date '"'$REF80 days ago'"'`'
+REF80=`expr $REF80 + 1`
 if [ ! -f $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_LOCAL ] ; then
 echo "rm -rf $REF30/MySQL/$PURGE" > $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_LOCAL
 else
@@ -2124,24 +2543,24 @@ rm -f /tmp/lecture-purges.txt
 rm -f $fichtemp
 
 
-REF72=$lecture_retentions
-REF73=$lecture_purges
+REF82=$lecture_retentions
+REF83=$lecture_purges
 
 
-if [ "$REF73" != "0" ] ; then
-if [ "$REF72" -le "$REF73" ] ; then
+if [ "$REF83" != "0" ] ; then
+if [ "$REF82" -le "$REF83" ] ; then
 
-REF73=`expr $REF73 + 1`
+REF83=`expr $REF83 + 1`
 
 echo "mkdir -p  /mnt/sauvegarde-mysql" > $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_RESEAU
 echo "if ! grep "/mnt/sauvegarde-mysql" /etc/mtab &>/dev/null ; then" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_RESEAU
 echo "	mount -t $CLIENT_SMB -o username=$REF42,password=$REF43 //$REF40/$REF41 /mnt/sauvegarde-mysql" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_RESEAU
 echo "fi" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_RESEAU
 
-while [ "$REF72" != "$REF73" ] 
+while [ "$REF82" != "$REF83" ] 
 do
-PURGE='`date +%d-%m-%Y --date '"'$REF72 days ago'"'`'
-REF72=`expr $REF72 + 1`
+PURGE='`date +%d-%m-%Y --date '"'$REF82 days ago'"'`'
+REF82=`expr $REF82 + 1`
 echo "rm -rf /mnt/sauvegarde-mysql/`uname -n`/MySQL/$PURGE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_RESEAU
 done
 
@@ -2201,14 +2620,14 @@ rm -f /tmp/lecture-purges.txt
 rm -f $fichtemp
 
 
-REF74=$lecture_retentions
-REF75=$lecture_purges
+REF84=$lecture_retentions
+REF85=$lecture_purges
 
 
-if [ "$REF75" != "0" ] ; then
-if [ "$REF74" -le "$REF75" ] ; then
+if [ "$REF85" != "0" ] ; then
+if [ "$REF84" -le "$REF85" ] ; then
 
-REF75=`expr $REF75 + 1`
+REF85=`expr $REF85 + 1`
 
 echo "ftp -i -n -z nossl<<purge-ftp" > $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
 echo "open $REF50 $REF51" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
@@ -2217,10 +2636,10 @@ echo "mkdir $REF52" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
 echo "mkdir $REF52/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
 
-while [ "$REF74" != "$REF75" ] 
+while [ "$REF84" != "$REF85" ] 
 do
-PURGE='`date +%d-%m-%Y --date '"'$REF74 days ago'"'`'
-REF74=`expr $REF74 + 1`
+PURGE='`date +%d-%m-%Y --date '"'$REF84 days ago'"'`'
+REF84=`expr $REF84 + 1`
 echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$PURGE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
 echo "cd $REF52/`uname -n`/MySQL/$PURGE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTP
@@ -2276,14 +2695,14 @@ rm -f /tmp/lecture-purges.txt
 rm -f $fichtemp
 
 
-REF75=$lecture_retentions
-REF76=$lecture_purges
+REF85=$lecture_retentions
+REF86=$lecture_purges
 
 
-if [ "$REF76" != "0" ] ; then
-if [ "$REF75" -le "$REF76" ] ; then
+if [ "$REF86" != "0" ] ; then
+if [ "$REF85" -le "$REF86" ] ; then
 
-REF76=`expr $REF76 + 1`
+REF86=`expr $REF86 + 1`
 
 echo "ftp-ssl -i -n -z ssl<<purge-ftps" > $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
 echo "open $REF60 $REF61" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
@@ -2292,10 +2711,10 @@ echo "mkdir $REF62" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
 
-while [ "$REF75" != "$REF76" ] 
+while [ "$REF85" != "$REF86" ] 
 do
-PURGE='`date +%d-%m-%Y --date '"'$REF75 days ago'"'`'
-REF75=`expr $REF75 + 1`
+PURGE='`date +%d-%m-%Y --date '"'$REF85 days ago'"'`'
+REF85=`expr $REF85 + 1`
 echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$PURGE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$PURGE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_FTPS
@@ -2317,6 +2736,100 @@ fi
 fi
 
 }
+
+#############################################################################
+# Fonction Creation Exécution Script Purge MySQL SFTP
+#############################################################################
+
+creation_execution_script_purge_sftp()
+{
+
+
+cat <<- EOF > $fichtemp
+select retentions
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-retentions.txt
+
+lecture_retentions=$(sed '$!d' /tmp/lecture-retentions.txt)
+rm -f /tmp/lecture-retentions.txt
+rm -f $fichtemp
+
+cat <<- EOF > $fichtemp
+select purges
+from sauvegarde_sftp
+where uname='`uname -n`' and application='mysql' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-purges.txt
+
+lecture_purges=$(sed '$!d' /tmp/lecture-purges.txt)
+rm -f /tmp/lecture-purges.txt
+rm -f $fichtemp
+
+
+REF86=$lecture_retentions
+REF87=$lecture_purges
+
+
+if [ "$REF87" != "0" ] ; then
+if [ "$REF86" -le "$REF87" ] ; then
+
+REF87=`expr $REF87 + 1`
+
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "cd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+
+while [ "$REF86" != "$REF87" ] 
+do
+PURGE='`date +%d.%m.%y --date '"'$REF86 days ago'"'`'
+REF86=`expr $REF86 + 1`
+echo "touch MySQL-`uname -n`-$PURGE.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+done
+
+echo "sshpass -p $REF73 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $REF71 $REF72@$REF70<<purge-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+
+
+REF86=$lecture_retentions
+REF87=$lecture_purges
+
+REF87=`expr $REF87 + 1`
+
+while [ "$REF86" != "$REF87" ] 
+do
+PURGE='`date +%d.%m.%y --date '"'$REF86 days ago'"'`'
+REF86=`expr $REF86 + 1`
+echo "put MySQL-`uname -n`-$PURGE.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$PURGE*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+done
+
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "purge-sftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+
+chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+
+$REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP &> /dev/null
+rm -f $REPERTOIRE_SCRIPTS/$FICHIER_PURGE_MySQL_SFTP
+
+fi
+fi
+
+}
+
+
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
 
 #############################################################################
 # Fonction Creation Cron Sauvegarde MySQL
@@ -2341,6 +2854,9 @@ cat <<- EOF > $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE
 
 
 ###### Sauvegarde MySQL FTPS ######
+
+
+###### Sauvegarde MySQL SFTP ######
 
 
 ################### Fichier Cron Sauvegarde MySQL ###################
@@ -2385,6 +2901,16 @@ fi
 if [ "$lecture_cron_ftps" = "non" ] ; then
 	ligne=$(sed -n '/###### Sauvegarde MySQL FTPS ######/=' $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE)
 	sed -i "`expr $ligne + 2`"i"#$REF66 $REF65 * * $REF67 root $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS" /$REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE
+fi
+
+if [ "$lecture_cron_sftp" = "oui" ] ; then
+	ligne=$(sed -n '/###### Sauvegarde MySQL SFTP ######/=' $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE)
+	sed -i "`expr $ligne + 2`"i"$REF75 $REF74 * * $REF76 root $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP" /$REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE
+fi
+
+if [ "$lecture_cron_sftp" = "non" ] ; then
+	ligne=$(sed -n '/###### Sauvegarde MySQL SFTP ######/=' $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE)
+	sed -i "`expr $ligne + 2`"i"#$REF75 $REF74 * * $REF76 root $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP" /$REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE
 fi
 
 /etc/init.d/cron restart &> /dev/null
@@ -2436,6 +2962,17 @@ $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 }
 
 #############################################################################
+# Fonction Exécution Script Sauvegarde SFTP
+#############################################################################
+
+execution_script_sauvegarde_sftp()
+{
+
+$REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
+
+}
+
+#############################################################################
 # Fonction Suppression Script Sauvegarde Local
 #############################################################################
 
@@ -2476,6 +3013,17 @@ suppression_script_sauvegarde_ftps()
 {
 
 rm -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+
+}
+
+#############################################################################
+# Fonction Suppression Script Sauvegarde SFTP
+#############################################################################
+
+suppression_script_sauvegarde_sftp()
+{
+
+rm -f $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
 
 }
 
@@ -2579,6 +3127,31 @@ rm -f /tmp/erreur
 }
 
 #############################################################################
+# Fonction Message d'erreur Serveur SFTP
+#############################################################################
+
+message_erreur_serveur_sftp()
+{
+	
+cat <<- EOF > /tmp/erreur     
+  Probleme de connexion avec le serveur sftp
+ Veuillez verifier que les parametres saisies
+sont correcte et que le serveur soit joignable
+EOF
+
+erreur=`cat /tmp/erreur`
+
+$DIALOG --ok-label "Quitter" \
+	 --colors \
+	 --backtitle "Configuration Sauvegarde MySQL" \
+	 --title "Erreur" \
+	 --msgbox  "\Z1$erreur\Zn" 7 52 
+
+rm -f /tmp/erreur
+
+}
+
+#############################################################################
 # Fonction Verification Couleur
 #############################################################################
 
@@ -2621,35 +3194,34 @@ else
 fi
 
 if [ "$lecture_erreur_ftp" = "oui" ] ; then
-	choix5="\ZB\Z1Configuration Sauvegarde FTP/FTPS\Zn" 
+	choix5="\ZB\Z1Configuration Sauvegarde FTP\Zn" 
 
 elif [ "$lecture_cron_ftp" = "non" ] ; then
-	choix5="\Zb\Z3Configuration Sauvegarde FTP/FTPS\Zn" 
+	choix5="\Zb\Z3Configuration Sauvegarde FTP\Zn" 
 
 else
-	choix5="\ZB\Z2Configuration Sauvegarde FTP/FTPS\Zn" 
-fi
-
-if [ "$lecture_erreur_ftp" = "oui" ] ; then
-	choix6="\ZB\Z1Configuration Sauvegarde FTP\Zn" 
-
-elif [ "$lecture_cron_ftp" = "non" ] ; then
-	choix6="\Zb\Z3Configuration Sauvegarde FTP\Zn" 
-
-else
-	choix6="\ZB\Z2Configuration Sauvegarde FTP\Zn" 
+	choix5="\ZB\Z2Configuration Sauvegarde FTP\Zn" 
 fi
 
 if [ "$lecture_erreur_ftps" = "oui" ] ; then
-	choix7="\ZB\Z1Configuration Sauvegarde FTPS\Zn" 
+	choix6="\ZB\Z1Configuration Sauvegarde FTPS\Zn" 
 
 elif [ "$lecture_cron_ftps" = "non" ] ; then
-	choix7="\Zb\Z3Configuration Sauvegarde FTPS\Zn" 
+	choix6="\Zb\Z3Configuration Sauvegarde FTPS\Zn" 
 
 else
-	choix7="\ZB\Z2Configuration Sauvegarde FTPS\Zn" 
+	choix6="\ZB\Z2Configuration Sauvegarde FTPS\Zn" 
 fi
 
+if [ "$lecture_erreur_sftp" = "oui" ] ; then
+	choix7="\ZB\Z1Configuration Sauvegarde SFTP\Zn" 
+
+elif [ "$lecture_cron_sftp" = "non" ] ; then
+	choix7="\Zb\Z3Configuration Sauvegarde SFTP\Zn" 
+
+else
+	choix7="\ZB\Z2Configuration Sauvegarde SFTP\Zn" 
+fi
 
 }
 
@@ -2672,7 +3244,7 @@ $DIALOG --backtitle "Configuration Sauvegarde MySQL" \
 	 --clear \
 	 --colors \
 	 --default-item "3" \
-	 --menu "Quel est votre choix" 12 60 4 \
+	 --menu "Quel est votre choix" 10 60 3 \
 	 "1" "$choix1" \
 	 "2" "Configuration Sauvegarde MySQL" \
 	 "3" "Quitter" 2> $fichtemp
@@ -2817,14 +3389,14 @@ $DIALOG --backtitle "Configuration Sauvegarde MySQL" \
 	 --clear \
 	 --colors \
 	 --default-item "8" \
-	 --menu "Quel est votre choix" 15 62 8 \
+	 --menu "Quel est votre choix" 15 60 8 \
 	 "1" "$choix2" \
 	 "2" "$choix3" \
 	 "3" "$choix4" \
-	 "4" "$choix5" \
+	 "4" "Configuration Sauvegarde FTP/FTPS/SFTP" \
 	 "5" "Execution Sauvegarde Local" \
 	 "6" "Execution Sauvegarde Reseau" \
-	 "7" "Execution Sauvegarde FTP/FTPS" \
+	 "7" "Execution Sauvegarde FTP/FTPS/SFTP" \
 	 "8" "\Z4Retour\Zn" 2> $fichtemp
 
 
@@ -2853,11 +3425,11 @@ case $valret in
 		menu_configuration_sauvegarde_mysql_reseau
 	fi
 
-	# Configuration Sauvegarde FTP/FTPS
+	# Configuration Sauvegarde FTP/FTPS/SFTP
 	if [ "$choix" = "4" ]
 	then
 		rm -f $fichtemp
-		menu_configuration_sauvegarde_mysql_ftp_ftps
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 	fi
 
 	# Execution Sauvegarde Local 
@@ -2890,11 +3462,11 @@ case $valret in
 		fi
 	fi
 
-	# Execution Sauvegarde FTP/FTPS 
+	# Execution Sauvegarde FTP/FTPS/SFTP 
 	if [ "$choix" = "7" ]
 	then
 		rm -f $fichtemp
-		menu_execution_sauvegarde_mysql_ftp_ftps
+		menu_execution_sauvegarde_mysql_ftp_ftps_sftp
 	fi
 
 	# Retour
@@ -3017,7 +3589,7 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 $DIALOG --backtitle "Configuration Sauvegarde MySQL" \
 	 --insecure \
 	 --title "Sauvegarde Une Base de Donnees" \
-	 --mixedform "Quel est votre choix" 11 60 0 \
+	 --mixedform "Quel est votre choix" 10 60 0 \
 	 "Utilisateur de la Base:" 1 1  "$REF20"     1 25  28 26 0  \
 	 "Password de la Base:"    2 1  "$REF21"     2 25  28 26 1  \
 	 "Nom de la Base:"         3 1  "$REF22"     3 25  28 26 0  2> $fichtemp
@@ -3162,6 +3734,8 @@ case $valret in
 	suppression_script_sauvegarde_local
 	suppression_script_sauvegarde_reseau
 	suppression_script_sauvegarde_ftp
+	suppression_script_sauvegarde_ftps
+	suppression_script_sauvegarde_Sftp
 	;;
 
  1)	# Appuyé sur Touche CTRL C
@@ -3349,6 +3923,8 @@ case $valret in
 	suppression_script_sauvegarde_local
 	suppression_script_sauvegarde_reseau
 	suppression_script_sauvegarde_ftp
+	suppression_script_sauvegarde_ftps
+	suppression_script_sauvegarde_sftp
 	;;
 
  1)	# Appuyé sur Touche CTRL C
@@ -3548,6 +4124,8 @@ case $valret in
 	suppression_script_sauvegarde_local
 	suppression_script_sauvegarde_reseau
 	suppression_script_sauvegarde_ftp
+	suppression_script_sauvegarde_ftps
+	suppression_script_sauvegarde_sftp
 	;;
 
  1)	# Appuyé sur Touche CTRL C
@@ -3769,6 +4347,8 @@ case $valret in
 	suppression_script_sauvegarde_local
 	suppression_script_sauvegarde_reseau
 	suppression_script_sauvegarde_ftp
+	suppression_script_sauvegarde_ftps
+	suppression_script_sauvegarde_sftp
 	;;
 
  1)	# Appuyé sur Touche CTRL C
@@ -3799,8 +4379,8 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 $DIALOG --backtitle "Configuration Sauvegarde MySQL" \
 	 --insecure \
 	 --title "Sauvegarde Plusieurs Bases de Donnees" \
-	 --mixedform "Quel est votre choix" 10 60 0 \
-	 "Utilisateur de la Base:" 1 1  "root"  1 25  28 26 0  \
+	 --mixedform "Quel est votre choix" 9 60 0 \
+	 "Utilisateur de la Base:" 1 1  "root"      1 25  28 26 0  \
 	 "Password de la Base:"    2 1  "password"  2 25  28 26 1  2> $fichtemp
 
 
@@ -3970,6 +4550,8 @@ while [ "$num" -le $nombres_lignes ]
 	suppression_script_sauvegarde_local
 	suppression_script_sauvegarde_reseau
 	suppression_script_sauvegarde_ftp
+	suppression_script_sauvegarde_ftps
+	suppression_script_sauvegarde_sftp
 	;;
 
  1)	# Appuyé sur Touche CTRL C
@@ -4393,7 +4975,7 @@ menu_configuration_sauvegarde_mysql
 # Fonction Menu Configuration Sauvegarde MySQL FTP/FTPS
 #############################################################################
 
-menu_configuration_sauvegarde_mysql_ftp_ftps()
+menu_configuration_sauvegarde_mysql_ftp_ftps_sftp()
 {
 
 lecture_valeurs_base_donnees
@@ -4403,14 +4985,15 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
 $DIALOG --backtitle "Configuration Sauvegarde MySQL" \
-	 --title "Configuration Sauvegarde FTP/FTPS" \
+	 --title "Configuration Sauvegarde FTP/FTPS/SFTP" \
 	 --clear \
 	 --colors \
-	 --default-item "3" \
-	 --menu "Quel est votre choix" 10 58 3 \
-	 "1" "$choix6" \
-	 "2" "$choix7" \
-	 "3" "\Z4Retour\Zn" 2> $fichtemp
+	 --default-item "4" \
+	 --menu "Quel est votre choix" 11 58 4 \
+	 "1" "$choix5" \
+	 "2" "$choix6" \
+	 "3" "$choix7" \
+	 "4" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -4431,8 +5014,15 @@ case $valret in
 		menu_configuration_sauvegarde_mysql_ftps
 	fi
 
-	# Retour
+	# Configuration Sauvegarde SFTP
 	if [ "$choix" = "3" ]
+	then
+		rm -f $fichtemp
+		menu_configuration_sauvegarde_mysql_sftp
+	fi
+
+	# Retour
+	if [ "$choix" = "4" ]
 	then
 		clear
 	fi
@@ -4457,7 +5047,7 @@ menu_configuration_sauvegarde_mysql
 # Fonction Menu Exécution Sauvegarde MySQL FTP/FTPS
 #############################################################################
 
-menu_execution_sauvegarde_mysql_ftp_ftps()
+menu_execution_sauvegarde_mysql_ftp_ftps_sftp()
 {
 
 lecture_valeurs_base_donnees
@@ -4466,14 +5056,15 @@ fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
 $DIALOG --backtitle "Configuration Sauvegarde MySQL" \
-	 --title "Execution Sauvegarde FTP/FTPS" \
+	 --title "Execution Sauvegarde FTP/FTPS/SFTP" \
 	 --clear \
 	 --colors \
-	 --default-item "3" \
-	 --menu "Quel est votre choix" 10 44 3 \
+	 --default-item "4" \
+	 --menu "Quel est votre choix" 11 44 4 \
 	 "1" "Execution Sauvegarde FTP" \
 	 "2" "Execution Sauvegarde FTPS" \
-	 "3" "\Z4Retour\Zn" 2> $fichtemp
+	 "3" "Execution Sauvegarde SFTP" \
+	 "4" "\Z4Retour\Zn" 2> $fichtemp
 
 
 valret=$?
@@ -4487,11 +5078,11 @@ case $valret in
 
 		if [ "$lecture_erreur_ftp" = "oui" ] ; then
 			message_erreur
-			menu_execution_sauvegarde_mysql_ftp_ftps
+			menu_execution_sauvegarde_mysql_ftp_ftps_sftp
 		else
 			creation_script_sauvegarde_ftp
 			execution_script_sauvegarde_ftp
-			menu_execution_sauvegarde_mysql_ftp_ftps
+			menu_execution_sauvegarde_mysql_ftp_ftps_sftp
 		fi
 	fi
 
@@ -4502,16 +5093,31 @@ case $valret in
 
 		if [ "$lecture_erreur_ftps" = "oui" ] ; then
 			message_erreur
-			menu_execution_sauvegarde_mysql_ftp_ftps
+			menu_execution_sauvegarde_mysql_ftp_ftps_sftp
 		else
 			creation_script_sauvegarde_ftps
 			execution_script_sauvegarde_ftps
-			menu_execution_sauvegarde_mysql_ftp_ftps
+			menu_execution_sauvegarde_mysql_ftp_ftps_sftp
+		fi
+	fi
+
+	# Exécution Sauvegarde SFTP
+	if [ "$choix" = "3" ]
+	then
+		rm -f $fichtemp
+
+		if [ "$lecture_erreur_sftp" = "oui" ] ; then
+			message_erreur
+			menu_execution_sauvegarde_mysql_ftp_ftps_sftp
+		else
+			creation_script_sauvegarde_sftp
+			execution_script_sauvegarde_sftp
+			menu_execution_sauvegarde_mysql_ftp_ftps_sftp
 		fi
 	fi
 
 	# Retour
-	if [ "$choix" = "3" ]
+	if [ "$choix" = "4" ]
 	then
 		clear
 	fi
@@ -4651,7 +5257,7 @@ case $valret in
 
 		creation_fichier_cron_sauvegarde
 		message_erreur_serveur_ftp
-		menu_configuration_sauvegarde_mysql_ftp_ftps
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 	fi
 	;;
 
@@ -4738,7 +5344,7 @@ case $valret in
 
 		creation_fichier_cron_sauvegarde
 		message_erreur_serveur_ftp
-		menu_configuration_sauvegarde_mysql_ftp_ftps
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 	fi
 	;;
 
@@ -4756,7 +5362,7 @@ rm -f $fichtemp
 
 fi
 
-menu_configuration_sauvegarde_mysql_ftp_ftps
+menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 }
 
 #############################################################################
@@ -4882,11 +5488,33 @@ case $valret in
 
 			creation_fichier_cron_sauvegarde
 			message_erreur_serveur_ftps
-			menu_configuration_sauvegarde_mysql_ftp_ftps
+			menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 		fi
 
 	else
+	
+		cat <<- EOF > $fichtemp
+		update sauvegarde_ftps 
+		set cron_activer='non', erreur='oui' 
+		where uname='`uname -n`' and application='mysql' ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+	
+		cat <<- EOF > $fichtemp
+		alter table sauvegarde_ftps order by application ;
+		alter table sauvegarde_ftps order by uname ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+
+		creation_fichier_cron_sauvegarde
 		message_erreur_serveur_ftps
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 	fi
 	;;
 
@@ -4977,11 +5605,33 @@ case $valret in
 
 			creation_fichier_cron_sauvegarde
 			message_erreur_serveur_ftps
-			menu_configuration_sauvegarde_mysql_ftp_ftps
+			menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 		fi
 
 	else
+		
+		cat <<- EOF > $fichtemp
+		update sauvegarde_ftps 
+		set cron_activer='non', erreur='oui' 
+		where uname='`uname -n`' and application='mysql' ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+	
+		cat <<- EOF > $fichtemp
+		alter table sauvegarde_ftps order by application ;
+		alter table sauvegarde_ftps order by uname ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+
+		creation_fichier_cron_sauvegarde
 		message_erreur_serveur_ftps
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 	fi
 	;;
 
@@ -4999,7 +5649,291 @@ rm -f $fichtemp
 
 fi
 
-menu_configuration_sauvegarde_mysql_ftp_ftps
+menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
+}
+
+#############################################################################
+# Fonction Menu Configuration Sauvegarde MySQL SFTP
+#############################################################################
+
+menu_configuration_sauvegarde_mysql_sftp()
+{
+
+if [ "$nombre_bases_lister" = "0" ] ; then
+	message_erreur
+else
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+
+$DIALOG --ok-label "Activation" \
+	 --extra-button \
+	 --extra-label "Desactivation" \
+	 --insecure \
+	 --backtitle "Configuration Sauvegarde MySQL" \
+	 --title "Configuration Sauvegarde SFTP" \
+	 --mixedform "Configuration Sauvegarde SFTP" 16 62 0 \
+	 "Nom Du Serveur SFTP:"        1 1 "$REF70"  1 28  28 28 0  \
+	 "Numero Port SFTP:"           2 1 "$REF71"  2 28  28 28 0  \
+	 "Nom De L'Utilisateur:"       3 1 "$REF72"  3 28  28 28 0  \
+	 "Saisie Du Password:"         4 1 "$REF73"  4 28  28 28 0  \
+	 "Planification Des Heures:"   5 1 "$REF74"  5 28  28 28 0  \
+	 "Planification Des Minutes:"  6 1 "$REF75"  6 28  03 03 0  \
+	 "Planification Des Jours:"    7 1 "$REF76"  7 28  14 14 0  \
+	 "Choix De La Retention:"      8 1 "$REF77"  8 28  04 04 0  2> $fichtemp
+
+
+valret=$?
+choix=`cat $fichtemp`
+case $valret in
+
+ 0)	# Activation Sauvegarde SFTP
+	VARSAISI10=$(sed -n 1p $fichtemp)
+	VARSAISI11=$(sed -n 2p $fichtemp)
+	VARSAISI12=$(sed -n 3p $fichtemp)
+	VARSAISI13=$(sed -n 4p $fichtemp)
+	VARSAISI14=$(sed -n 5p $fichtemp)
+	VARSAISI15=$(sed -n 6p $fichtemp)
+	VARSAISI16=$(sed -n 7p $fichtemp)
+	VARSAISI17=$(sed -n 8p $fichtemp)
+	VARSAISI18=$REF78
+
+
+	ping -c 4 $VARSAISI10 >/dev/null 2>&1
+
+	if [ $? -eq 0 ] ; then
+
+		cat <<- EOF > $fichtemp
+		bye
+		EOF
+
+		sshpass -p $VARSAISI13 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $VARSAISI11 $VARSAISI12@$VARSAISI10 < $fichtemp > verification-connexion-sftp.txt 2>&1
+
+		rm -f $fichtemp
+
+		verification_connexion_sftp=$(sed -n '$=' verification-connexion-sftp.txt)
+
+		if grep "bye" verification-connexion-sftp.txt &>/dev/null ; then
+
+			cat <<- EOF > $fichtemp
+			delete from sauvegarde_sftp
+			where uname='`uname -n`' and application='mysql' ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+	
+			cat <<- EOF > $fichtemp
+			insert into sauvegarde_sftp ( uname, serveur, port, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
+			values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , 'oui' , 'non' , 'mysql' ) ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+
+			cat <<- EOF > $fichtemp
+			alter table sauvegarde_sftp order by application ;
+			alter table sauvegarde_sftp order by uname ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+
+			rm -f verification-connexion-sftp.txt
+
+			creation_script_sauvegarde_sftp
+			creation_fichier_cron_sauvegarde
+			creation_execution_script_purge_sftp
+
+		else
+		
+			cat <<- EOF > $fichtemp
+			update sauvegarde_sftp
+			set cron_activer='non', erreur='oui' 
+			where uname='`uname -n`' and application='mysql' ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+	
+			cat <<- EOF > $fichtemp
+			alter table sauvegarde_sftp order by application ;
+			alter table sauvegarde_sftp order by uname ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+
+			rm -f verification-connexion-sftp.txt
+
+			creation_fichier_cron_sauvegarde
+			message_erreur_serveur_sftp
+			menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
+		fi
+
+	else
+	
+		cat <<- EOF > $fichtemp
+		update sauvegarde_sftp 
+		set cron_activer='non', erreur='oui' 
+		where uname='`uname -n`' and application='mysql' ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+	
+		cat <<- EOF > $fichtemp
+		alter table sauvegarde_sftp order by application ;
+		alter table sauvegarde_sftp order by uname ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+
+		creation_fichier_cron_sauvegarde
+		message_erreur_serveur_sftp
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
+	fi
+	;;
+
+ 3)	# Désactivation Sauvegarde SFTP
+	VARSAISI10=$(sed -n 1p $fichtemp)
+	VARSAISI11=$(sed -n 2p $fichtemp)
+	VARSAISI12=$(sed -n 3p $fichtemp)
+	VARSAISI13=$(sed -n 4p $fichtemp)
+	VARSAISI14=$(sed -n 5p $fichtemp)
+	VARSAISI15=$(sed -n 6p $fichtemp)
+	VARSAISI16=$(sed -n 7p $fichtemp)
+	VARSAISI17=$(sed -n 8p $fichtemp)
+	VARSAISI18=$REF78
+
+
+	ping -c 4 $VARSAISI10 >/dev/null 2>&1
+
+	if [ $? -eq 0 ] ; then
+
+		cat <<- EOF > $fichtemp
+		bye
+		EOF
+
+		sshpass -p $VARSAISI13 sftp -o StrictHostKeyChecking=no -o LogLevel=quiet -P $VARSAISI11 $VARSAISI12@$VARSAISI10 < $fichtemp > verification-connexion-sftp.txt 2>&1
+
+		rm -f $fichtemp
+
+		verification_connexion_sftp=$(sed -n '$=' verification-connexion-sftp.txt)
+
+		if grep "bye" verification-connexion-sftp.txt &>/dev/null ; then
+
+			cat <<- EOF > $fichtemp
+			delete from sauvegarde_sftp
+			where uname='`uname -n`' and application='mysql' ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+	
+			cat <<- EOF > $fichtemp
+			insert into sauvegarde_sftp ( uname, serveur, port, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
+			values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , 'non' , 'non' , 'mysql' ) ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+
+			cat <<- EOF > $fichtemp
+			alter table sauvegarde_sftp order by application ;
+			alter table sauvegarde_sftp order by uname ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+
+			rm -f verification-connexion-sftp.txt
+
+			creation_script_sauvegarde_sftp
+			creation_fichier_cron_sauvegarde
+			creation_execution_script_purge_sftp
+
+		else
+		
+			cat <<- EOF > $fichtemp
+			update sauvegarde_sftp
+			set cron_activer='non', erreur='oui' 
+			where uname='`uname -n`' and application='mysql' ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+	
+			cat <<- EOF > $fichtemp
+			alter table sauvegarde_sftp order by application ;
+			alter table sauvegarde_sftp order by uname ;
+			EOF
+
+			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+			rm -f $fichtemp
+
+			rm -f verification-connexion-sftp.txt
+
+			creation_fichier_cron_sauvegarde
+			message_erreur_serveur_sftp
+			menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
+		fi
+
+	else
+		
+		cat <<- EOF > $fichtemp
+		update sauvegarde_sftp 
+		set cron_activer='non', erreur='oui' 
+		where uname='`uname -n`' and application='mysql' ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+	
+		cat <<- EOF > $fichtemp
+		alter table sauvegarde_sftp order by application ;
+		alter table sauvegarde_sftp order by uname ;
+		EOF
+
+		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
+
+		rm -f $fichtemp
+
+		creation_fichier_cron_sauvegarde
+		message_erreur_serveur_sftp
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
+	fi
+	;;
+
+ 1)	# Appuyé sur Touche CTRL C
+	echo "Appuyé sur Touche CTRL C."
+	;;
+
+ 255)	# Appuyé sur Touche Echap
+	echo "Appuyé sur Touche Echap."
+	;;
+
+esac
+
+rm -f $fichtemp
+
+fi
+
+menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 }
 
 #############################################################################
