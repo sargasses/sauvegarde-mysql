@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 14-04-2014
+# Date : 15-04-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1736,16 +1736,17 @@ creation_script_sauvegarde_ftp()
 
 lecture_valeurs_base_donnees
 lecture_valeurs_retentions
+lecture_nombre_aleatoire
 
 
 if [ "$nombre_bases_lister" = "1" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 echo "ftp -i -n -z nossl<<transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1756,7 +1757,7 @@ echo "mkdir $REF52/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$RETENTION_MySQL_FTP" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1767,24 +1768,24 @@ echo "rmdir $REF52/`uname -n`/MySQL/$RETENTION_MySQL_FTP" >> $REPERTOIRE_SCRIPTS
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 
 if [ "$nombre_bases_lister" = "2" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 if [ "$REF23" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 echo "ftp -i -n -z nossl<<transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1795,7 +1796,7 @@ echo "mkdir $REF52/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF23*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1807,30 +1808,30 @@ echo "rmdir $REF52/`uname -n`/MySQL/$RETENTION_MySQL_FTP" >> $REPERTOIRE_SCRIPTS
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 
 if [ "$nombre_bases_lister" = "3" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 if [ "$REF23" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 if [ "$REF24" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 echo "ftp -i -n -z nossl<<transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1841,7 +1842,7 @@ echo "mkdir $REF52/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF23*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF24*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1854,36 +1855,36 @@ echo "rmdir $REF52/`uname -n`/MySQL/$RETENTION_MySQL_FTP" >> $REPERTOIRE_SCRIPTS
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 
 if [ "$nombre_bases_lister" = "4" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 if [ "$REF23" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 if [ "$REF24" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 if [ "$REF25" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases > $TMP/$DATE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 echo "ftp -i -n -z nossl<<transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1894,7 +1895,7 @@ echo "mkdir $REF52/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF23*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "put $REF24*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
@@ -1908,14 +1909,14 @@ echo "rmdir $REF52/`uname -n`/MySQL/$RETENTION_MySQL_FTP" >> $REPERTOIRE_SCRIPTS
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 fi
 
 
 if [ "$nombre_bases_lister" -ge "5" ] ; then
 
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 cat <<- EOF > $fichtemp
 select base
@@ -1936,9 +1937,9 @@ while [ "$num" -le $nombres_lignes ]
 	NOM_BASE=$(sed -n "$num"p /tmp/lecture-bases.txt)
 	
 	if [ "$NOM_BASE" = "mysql" ] ; then	
-		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases --ignore-table=mysql.event > $TMP/$DATE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 	else
-		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases > $TMP/$DATE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases > $TMP/$NOMBRE_ALEATOIRE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 	fi
 
 	num=`expr $num + 1`
@@ -1952,7 +1953,7 @@ echo "mkdir $REF52/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "cd $REF52/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 
 num=1
@@ -1974,7 +1975,7 @@ echo "rmdir $REF52/`uname -n`/MySQL/$RETENTION_MySQL_FTP" >> $REPERTOIRE_SCRIPTS
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "transfert-ftp" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 
 rm -f /tmp/lecture-bases.txt
 rm -f $fichtemp
@@ -1994,16 +1995,17 @@ creation_script_sauvegarde_ftps()
 
 lecture_valeurs_base_donnees
 lecture_valeurs_retentions
+lecture_nombre_aleatoire
 
 
 if [ "$nombre_bases_lister" = "1" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "mkdir -p $TMP_FTPS/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 echo "ftp-ssl -i -n -z ssl<<transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2014,7 +2016,7 @@ echo "mkdir $REF62/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF62/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2025,24 +2027,24 @@ echo "rmdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPT
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 
 if [ "$nombre_bases_lister" = "2" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 if [ "$REF23" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 echo "ftp-ssl -i -n -z ssl<<transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2053,7 +2055,7 @@ echo "mkdir $REF62/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF62/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF23*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd /" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2065,30 +2067,30 @@ echo "rmdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPT
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 
 if [ "$nombre_bases_lister" = "3" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 if [ "$REF23" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 if [ "$REF24" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 echo "ftp-ssl -i -n -z ssl<<transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2099,7 +2101,7 @@ echo "mkdir $REF62/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF62/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF23*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF24*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2112,36 +2114,36 @@ echo "rmdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPT
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 
 if [ "$nombre_bases_lister" = "4" ] ; then
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 if [ "$REF22" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$DATE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF22 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF22-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 if [ "$REF23" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$DATE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF23 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF23-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 if [ "$REF24" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$DATE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF24 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF24-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 if [ "$REF25" = "mysql" ] ; then
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases --ignore-table=mysql.event > $TMP/$DATE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 else
-	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases > $TMP/$DATE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+	echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $REF25 --databases > $TMP/$NOMBRE_ALEATOIRE/$REF25-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 echo "ftp-ssl -i -n -z ssl<<transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2152,7 +2154,7 @@ echo "mkdir $REF62/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF62/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF22*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF23*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "put $REF24*.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
@@ -2166,14 +2168,14 @@ echo "rmdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPT
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 fi
 
 
 if [ "$nombre_bases_lister" -ge "5" ] ; then
 
-echo "rm -rf $TMP/$DATE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "mkdir -p $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" > $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "mkdir -p $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 cat <<- EOF > $fichtemp
 select base
@@ -2194,9 +2196,9 @@ while [ "$num" -le $nombres_lignes ]
 	NOM_BASE=$(sed -n "$num"p /tmp/lecture-bases.txt)
 	
 	if [ "$NOM_BASE" = "mysql" ] ; then	
-		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases --ignore-table=mysql.event > $TMP/$DATE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases --ignore-table=mysql.event > $TMP/$NOMBRE_ALEATOIRE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 	else
-		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases > $TMP/$DATE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+		echo "mysqldump -h `uname -n` -u $REF20 -p$REF21 $NOM_BASE --databases > $TMP/$NOMBRE_ALEATOIRE/$NOM_BASE-$DATE_HEURE.sql" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 	fi
 
 	num=`expr $num + 1`
@@ -2210,7 +2212,7 @@ echo "mkdir $REF62/`uname -n`" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 echo "mkdir $REF62/`uname -n`/MySQL" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "mkdir $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "cd $REF62/`uname -n`/MySQL/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "lcd $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 
 num=1
@@ -2232,7 +2234,7 @@ echo "rmdir $REF62/`uname -n`/MySQL/$RETENTION_MySQL_FTPS" >> $REPERTOIRE_SCRIPT
 echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 echo "transfert-ftps" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
-echo "rm -rf $TMP/$DATE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
+echo "rm -rf $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 
 rm -f /tmp/lecture-bases.txt
 rm -f $fichtemp
