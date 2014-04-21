@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 15-04-2014
+# Date : 21-04-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -2823,15 +2823,6 @@ fi
 fi
 
 }
-
-
-echo "lcd $TMP/$NOMBRE_ALEATOIRE" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
-echo "put MySQL-`uname -n`-$DATE_HEURE.tgz" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
-echo "put MySQL-`uname -n`-$RETENTION_MySQL_SFTP.txt" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
-echo "rm MySQL-`uname -n`-$RETENTION_MySQL_SFTP*.*" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
-echo "bye" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
-echo "quit" >> $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_SFTP
-
 
 #############################################################################
 # Fonction Creation Cron Sauvegarde MySQL
