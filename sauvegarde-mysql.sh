@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 23-04-2014
+# Date : 30-04-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -297,10 +297,10 @@ rm -f $fichtemp
 }
 
 #############################################################################
-# Fonction Lecture Des Valeurs Dans La Base de Donnée
+# Fonction Lecture Information Base de Donnée MySQL
 #############################################################################
 
-lecture_valeurs_base_donnees()
+lecture_information_base_donnees_mysql()
 {
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -422,6 +422,18 @@ else
 fi
 fi
 
+}
+
+#############################################################################
+# Fonction Lecture Information Sauvegarde Local
+#############################################################################
+
+lecture_information_sauvegarde_local()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+
 cat <<- EOF > $fichtemp
 select chemin
 from sauvegarde_local
@@ -514,6 +526,17 @@ else
 	REF34=$lecture_retentions
 	REF35=$lecture_retentions
 fi
+
+}
+
+#############################################################################
+# Fonction Lecture Information Sauvegarde Reseau
+#############################################################################
+
+lecture_information_sauvegarde_reseau()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
 cat <<- EOF > $fichtemp
@@ -662,6 +685,17 @@ else
 	REF47=$lecture_retentions
 	REF48=$lecture_retentions
 fi
+
+}
+
+#############################################################################
+# Fonction Lecture Information Sauvegarde FTP
+#############################################################################
+
+lecture_information_sauvegarde_ftp()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
 cat <<- EOF > $fichtemp
@@ -829,6 +863,17 @@ else
 	REF59=$lecture_retentions
 fi
 
+}
+
+#############################################################################
+# Fonction Lecture Information Sauvegarde FTPS
+#############################################################################
+
+lecture_information_sauvegarde_ftps()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
 
 cat <<- EOF > $fichtemp
 select serveur
@@ -995,6 +1040,17 @@ else
 	REF69=$lecture_retentions
 fi
 
+}
+
+#############################################################################
+# Fonction Lecture Information Sauvegarde SFTP
+#############################################################################
+
+lecture_information_sauvegarde_sftp()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
 
 cat <<- EOF > $fichtemp
 select serveur
@@ -1143,6 +1199,17 @@ else
 	REF78=$lecture_retentions
 fi
 
+}
+
+#############################################################################
+# Fonction Lecture Information Cron
+#############################################################################
+
+lecture_information_cron()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
 
 cat <<- EOF > $fichtemp
 select cron_activer
@@ -1225,6 +1292,17 @@ fi
 if [ "$lecture_cron_sftp" = "" ] ; then
 	lecture_cron_sftp=non
 fi
+
+}
+
+#############################################################################
+# Fonction Lecture Information Erreur
+#############################################################################
+
+lecture_information_erreur()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
 cat <<- EOF > $fichtemp
@@ -1332,8 +1410,10 @@ RETENTION_MySQL_SFTP='`date +%d.%m.%y --date '"'$REF77 days ago'"'`'
 creation_script_sauvegarde_local()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_base_donnees_mysql
+lecture_information_sauvegarde_local
 lecture_valeurs_retentions
+lecture_nombre_aleatoire
 
 
 if [ "$nombre_bases_lister" = "1" ] ; then
@@ -1493,8 +1573,10 @@ chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_LOCAL
 creation_script_sauvegarde_reseau()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_base_donnees_mysql
+lecture_information_sauvegarde_reseau
 lecture_valeurs_retentions
+lecture_nombre_aleatoire
 
 
 if [ "$nombre_bases_lister" = "1" ] ; then
@@ -1734,7 +1816,8 @@ chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_RESEAU
 creation_script_sauvegarde_ftp()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_base_donnees_mysql
+lecture_information_sauvegarde_ftp
 lecture_valeurs_retentions
 lecture_nombre_aleatoire
 
@@ -1986,7 +2069,8 @@ chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTP
 creation_script_sauvegarde_ftps()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_base_donnees_mysql
+lecture_information_sauvegarde_ftps
 lecture_valeurs_retentions
 lecture_nombre_aleatoire
 
@@ -2238,7 +2322,8 @@ chmod 0755 $REPERTOIRE_SCRIPTS/$FICHIER_SCRIPTS_MySQL_FTPS
 creation_script_sauvegarde_sftp()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_base_donnees_mysql
+lecture_information_sauvegarde_sftp
 lecture_valeurs_retentions
 lecture_nombre_aleatoire
 
@@ -2817,7 +2902,11 @@ fi
 creation_fichier_cron_sauvegarde()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_sauvegarde_local
+lecture_information_sauvegarde_reseau
+lecture_information_sauvegarde_ftp
+lecture_information_sauvegarde_ftps
+lecture_information_sauvegarde_sftp
 
 
 cat <<- EOF > $REPERTOIRE_CRON/$FICHIER_CRON_SAUVEGARDE
@@ -3357,7 +3446,9 @@ menu
 menu_configuration_sauvegarde_mysql()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_base_donnees_mysql
+lecture_information_cron
+lecture_information_erreur
 verification_couleur
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -3476,6 +3567,8 @@ menu
 
 menu_configuration_bases_mysql()
 {
+
+lecture_information_base_donnees_mysql
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -4559,6 +4652,8 @@ if [ "$nombre_bases_lister" = "0" ] ; then
 	message_erreur
 else
 
+lecture_information_sauvegarde_local
+
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
 
@@ -4688,6 +4783,8 @@ menu_configuration_sauvegarde_mysql_reseau()
 if [ "$nombre_bases_lister" = "0" ] ; then
 	message_erreur
 else
+
+lecture_information_sauvegarde_reseau
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -4957,7 +5054,8 @@ menu_configuration_sauvegarde_mysql
 menu_configuration_sauvegarde_mysql_ftp_ftps_sftp()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_cron
+lecture_information_erreur
 verification_couleur
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
@@ -5029,7 +5127,7 @@ menu_configuration_sauvegarde_mysql
 menu_execution_sauvegarde_mysql_ftp_ftps_sftp()
 {
 
-lecture_valeurs_base_donnees
+lecture_information_erreur
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -5127,6 +5225,8 @@ menu_configuration_sauvegarde_mysql_ftp()
 if [ "$nombre_bases_lister" = "0" ] ; then
 	message_erreur
 else
+
+lecture_information_sauvegarde_ftp
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -5354,6 +5454,8 @@ menu_configuration_sauvegarde_mysql_ftps()
 if [ "$nombre_bases_lister" = "0" ] ; then
 	message_erreur
 else
+
+lecture_information_sauvegarde_ftps
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
@@ -5641,6 +5743,8 @@ menu_configuration_sauvegarde_mysql_sftp()
 if [ "$nombre_bases_lister" = "0" ] ; then
 	message_erreur
 else
+
+lecture_information_sauvegarde_sftp
 
 fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
 
