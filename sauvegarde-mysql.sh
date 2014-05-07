@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 05-05-2014
+# Date : 07-05-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -1276,6 +1276,115 @@ fi
 
 if [ "$lecture_erreur_sftp" = "" ] ; then
 	lecture_erreur_sftp=oui
+fi
+
+}
+
+#############################################################################
+# Fonction Verification Sauvegarde Progammer simultanément
+#############################################################################
+
+verification_sauvegarde_simultane()
+{
+
+fichtemp=`tempfile 2>/dev/null` || fichtemp=/tmp/test$$
+
+cat <<- EOF > $fichtemp
+select heures,minutes
+from sauvegarde_local
+where uname='`uname -n`' and cron_activer='oui' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-heures-minutes-local.txt
+
+sed -i '1d' /tmp/lecture-heures-minutes-local.txt
+sed -i "s/\t//ig" /tmp/lecture-heures-minutes-local.txt
+
+rm -f $fichtemp
+
+
+cat <<- EOF > $fichtemp
+select heures,minutes
+from sauvegarde_reseau
+where uname='`uname -n`' and cron_activer='oui' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-heures-minutes-reseau.txt
+
+sed -i '1d' /tmp/lecture-heures-minutes-reseau.txt
+sed -i "s/\t//ig" /tmp/lecture-heures-minutes-reseau.txt
+
+rm -f $fichtemp
+
+
+cat <<- EOF > $fichtemp
+select heures,minutes
+from sauvegarde_ftp
+where uname='`uname -n`' and cron_activer='oui' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-heures-minutes-ftp.txt
+
+sed -i '1d' /tmp/lecture-heures-minutes-ftp.txt
+sed -i "s/\t//ig" /tmp/lecture-heures-minutes-ftp.txt
+
+rm -f $fichtemp
+
+
+cat <<- EOF > $fichtemp
+select heures,minutes
+from sauvegarde_ftps
+where uname='`uname -n`' and cron_activer='oui' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-heures-minutes-ftps.txt
+
+sed -i '1d' /tmp/lecture-heures-minutes-ftps.txt
+sed -i "s/\t//ig" /tmp/lecture-heures-minutes-ftps.txt
+
+rm -f $fichtemp
+
+
+cat <<- EOF > $fichtemp
+select heures,minutes
+from sauvegarde_sftp
+where uname='`uname -n`' and cron_activer='oui' ;
+EOF
+
+mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp >/tmp/lecture-heures-minutes-sftp.txt
+
+sed -i '1d' /tmp/lecture-heures-minutes-sftp.txt
+sed -i "s/\t//ig" /tmp/lecture-heures-minutes-sftp.txt
+
+rm -f $fichtemp
+
+
+cat /tmp/lecture-heures-minutes-local.txt > /tmp/lecture-heures-minutes.txt
+cat /tmp/lecture-heures-minutes-reseau.txt >> /tmp/lecture-heures-minutes.txt
+cat /tmp/lecture-heures-minutes-ftp.txt >> /tmp/lecture-heures-minutes.txt
+cat /tmp/lecture-heures-minutes-ftps.txt >> /tmp/lecture-heures-minutes.txt
+cat /tmp/lecture-heures-minutes-sftp.txt >> /tmp/lecture-heures-minutes.txt
+	    
+
+rm -f /tmp/lecture-heures-minutes-local.txt
+rm -f /tmp/lecture-heures-minutes-reseau.txt
+rm -f /tmp/lecture-heures-minutes-ftp.txt
+rm -f /tmp/lecture-heures-minutes-ftps.txt
+rm -f /tmp/lecture-heures-minutes-sftp.txt
+
+
+resultat=$(grep -c "$HEURE_MINUTE" /tmp/lecture-heures-minutes.txt)
+
+
+if [ "$resultat" -ge "3" ] ; then
+	message_erreur_sauvegarde_simultane
+	if [ "$menu_origine" = "FTP" ] ||
+	   [ "$menu_origine" = "FTPS" ] ||
+	   [ "$menu_origine" = "SFTP" ]; then
+		menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
+	else
+		menu_configuration_sauvegarde_mysql
+	fi
 fi
 
 }
@@ -3012,6 +3121,31 @@ rm -f /tmp/erreur
 }
 
 #############################################################################
+# Fonction Message d'erreur Sauvegarde Progammer simultanément
+#############################################################################
+
+message_erreur_sauvegarde_simultane()
+{
+	
+cat <<- EOF > /tmp/erreur     
+ Il y a actuelement trop de sauvegarde 
+       progammer simultanement
+Veuillez entrer une autre planification
+EOF
+
+erreur=`cat /tmp/erreur`
+
+$DIALOG --ok-label "Quitter" \
+	 --colors \
+	 --backtitle "Configuration Sauvegarde MySQL" \
+	 --title "Erreur" \
+	 --msgbox  "\Z1$erreur\Zn" 7 44 
+
+rm -f /tmp/erreur
+
+}
+
+#############################################################################
 # Fonction Message d'erreur Serveur CIFS
 #############################################################################
 
@@ -4673,7 +4807,13 @@ case $valret in
 	VARSAISI14=$(sed -n 5p $fichtemp)
 	VARSAISI15=$REF35
 
-	
+
+	HEURE_MINUTE=$VARSAISI11$VARSAISI12
+	menu_origine=Local
+
+	verification_sauvegarde_simultane
+
+
 	cat <<- EOF > $fichtemp
 	delete from sauvegarde_local
 	where uname='`uname -n`' and application='mysql' ;
@@ -4713,6 +4853,12 @@ case $valret in
 	VARSAISI13=$(sed -n 4p $fichtemp)
 	VARSAISI14=$(sed -n 5p $fichtemp)
 	VARSAISI15=$REF35
+
+
+	HEURE_MINUTE=$VARSAISI11$VARSAISI12
+	menu_origine=Local
+	
+	verification_sauvegarde_simultane
 
 
 	cat <<- EOF > $fichtemp
@@ -4811,6 +4957,12 @@ case $valret in
 	VARSAISI16=$(sed -n 7p $fichtemp)
 	VARSAISI17=$(sed -n 8p $fichtemp)
 	VARSAISI18=$REF48
+
+
+	HEURE_MINUTE=$VARSAISI14$VARSAISI15
+	menu_origine=Reseau
+	
+	verification_sauvegarde_simultane
 
 
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
@@ -4921,6 +5073,12 @@ case $valret in
 	VARSAISI16=$(sed -n 7p $fichtemp)
 	VARSAISI17=$(sed -n 8p $fichtemp)
 	VARSAISI18=$REF48
+
+
+	HEURE_MINUTE=$VARSAISI14$VARSAISI15
+	menu_origine=Reseau
+	
+	verification_sauvegarde_simultane
 
 
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
@@ -5257,6 +5415,12 @@ case $valret in
 	VARSAISI19=$REF59
 
 
+	HEURE_MINUTE=$VARSAISI15$VARSAISI16
+	menu_origine=FTP
+	
+	verification_sauvegarde_simultane
+
+
 	cat <<- EOF > $fichtemp
 	open $VARSAISI10 $VARSAISI11
 	user $VARSAISI13 $VARSAISI14
@@ -5342,6 +5506,12 @@ case $valret in
 	VARSAISI17=$(sed -n 8p $fichtemp)
 	VARSAISI18=$(sed -n 9p $fichtemp)
 	VARSAISI19=$REF59
+
+
+	HEURE_MINUTE=$VARSAISI15$VARSAISI16
+	menu_origine=FTP
+	
+	verification_sauvegarde_simultane
 
 
 	cat <<- EOF > $fichtemp
@@ -5486,6 +5656,12 @@ case $valret in
 	VARSAISI19=$REF69
 
 
+	HEURE_MINUTE=$VARSAISI15$VARSAISI16
+	menu_origine=FTPS
+	
+	verification_sauvegarde_simultane
+
+
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
 
 	if [ $? -eq 0 ] ; then
@@ -5601,6 +5777,12 @@ case $valret in
 	VARSAISI17=$(sed -n 8p $fichtemp)
 	VARSAISI18=$(sed -n 9p $fichtemp)
 	VARSAISI19=$REF69
+
+
+	HEURE_MINUTE=$VARSAISI15$VARSAISI16
+	menu_origine=FTPS
+	
+	verification_sauvegarde_simultane
 
 
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
@@ -5775,6 +5957,12 @@ case $valret in
 	VARSAISI19=$REF79
 
 
+	HEURE_MINUTE=$VARSAISI15$VARSAISI16
+	menu_origine=SFTP
+	
+	verification_sauvegarde_simultane
+
+
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
 
 	if [ $? -eq 0 ] ; then
@@ -5890,6 +6078,12 @@ case $valret in
 	VARSAISI17=$(sed -n 8p $fichtemp)
 	VARSAISI18=$(sed -n 9p $fichtemp)
 	VARSAISI19=$REF79
+
+
+	HEURE_MINUTE=$VARSAISI15$VARSAISI16
+	menu_origine=SFTP
+	
+	verification_sauvegarde_simultane
 
 
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
