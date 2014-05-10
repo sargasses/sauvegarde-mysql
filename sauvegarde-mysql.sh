@@ -5160,7 +5160,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_local order by application ;
 		alter table sauvegarde_local order by uname ;
@@ -5184,7 +5184,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		insert into sauvegarde_local ( uname, chemin, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 		values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , 'oui' , 'non' , 'mysql' ) ;
@@ -5231,7 +5231,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_local order by application ;
 		alter table sauvegarde_local order by uname ;
@@ -5255,7 +5255,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		insert into sauvegarde_local ( uname, chemin, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 		values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , 'non' , 'non' , 'mysql' ) ;
@@ -5352,16 +5352,16 @@ case $valret in
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
 
 	if [ $? -eq 0 ] ; then
-	
+
 		if ! grep "/mnt/verification-mount" /etc/mtab &>/dev/null ; then
 			mkdir -p /mnt/verification-mount
 			mount -t $CLIENT_SMB -o username=$VARSAISI12,password=$VARSAISI13 //$VARSAISI10/$VARSAISI11 /mnt/verification-mount &>/dev/null
 		fi
 
 		if grep "/mnt/verification-mount" /etc/mtab &>/dev/null ; then
-			
+
 			if [ "$resultat" -ge "$SAUVEGARDE_SIMULTANE" ] ; then
-				
+
 				cat <<- EOF > $fichtemp
 				update sauvegarde_reseau
 				set cron_activer='non', erreur='oui'
@@ -5371,7 +5371,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_reseau order by application ;
 				alter table sauvegarde_reseau order by uname ;
@@ -5398,7 +5398,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_reseau ( uname, serveur, partage, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , 'oui' , 'non' , 'mysql' ) ;
@@ -5436,7 +5436,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_reseau order by application ;
 			alter table sauvegarde_reseau order by uname ;
@@ -5462,7 +5462,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_reseau order by application ;
 		alter table sauvegarde_reseau order by uname ;
@@ -5495,7 +5495,7 @@ case $valret in
 	ping -c 4 $VARSAISI10 >/dev/null 2>&1
 
 	if [ $? -eq 0 ] ; then
-	
+
 		if ! grep "/mnt/verification-mount" /etc/mtab &>/dev/null ; then
 			mkdir -p /mnt/verification-mount
 			mount -t $CLIENT_SMB -o username=$VARSAISI12,password=$VARSAISI13 //$VARSAISI10/$VARSAISI11 /mnt/verification-mount &>/dev/null
@@ -5504,7 +5504,7 @@ case $valret in
 		if grep "/mnt/verification-mount" /etc/mtab &>/dev/null ; then
 
 			if [ "$resultat" -ge "$SAUVEGARDE_SIMULTANE" ] ; then
-				
+
 				cat <<- EOF > $fichtemp
 				update sauvegarde_reseau
 				set cron_activer='non', erreur='oui'
@@ -5514,7 +5514,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_reseau order by application ;
 				alter table sauvegarde_reseau order by uname ;
@@ -5541,7 +5541,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-		
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_reseau ( uname, serveur, partage, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , 'non' , 'non' , 'mysql' ) ;
@@ -5579,7 +5579,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_reseau order by application ;
 			alter table sauvegarde_reseau order by uname ;
@@ -5605,7 +5605,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_reseau order by application ;
 		alter table sauvegarde_reseau order by uname ;
@@ -5891,7 +5891,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_ftp order by application ;
 				alter table sauvegarde_ftp order by uname ;
@@ -5915,7 +5915,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_ftp ( uname, serveur, port, dossier, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , '$VARSAISI19' , 'oui' , 'non' , 'mysql' ) ;
@@ -5940,7 +5940,7 @@ case $valret in
 			fi 
 
 		else
-		
+
 			cat <<- EOF > $fichtemp
 			update sauvegarde_ftp
 			set cron_activer='non', erreur='oui'
@@ -5950,7 +5950,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_ftp order by application ;
 			alter table sauvegarde_ftp order by uname ;
@@ -5976,7 +5976,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_ftp order by application ;
 		alter table sauvegarde_ftp order by uname ;
@@ -6038,7 +6038,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_ftp order by application ;
 				alter table sauvegarde_ftp order by uname ;
@@ -6062,7 +6062,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_ftp ( uname, serveur, port, dossier, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , '$VARSAISI19' , 'non' , 'non' , 'mysql' ) ;
@@ -6087,7 +6087,7 @@ case $valret in
 			fi
 
 		else
-		
+
 			cat <<- EOF > $fichtemp
 			update sauvegarde_ftp
 			set cron_activer='non', erreur='oui'
@@ -6097,7 +6097,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_ftp order by application ;
 			alter table sauvegarde_ftp order by uname ;
@@ -6111,6 +6111,7 @@ case $valret in
 			message_erreur_serveur_ftp
 			menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
 		fi
+
 	else
 
 		cat <<- EOF > $fichtemp
@@ -6122,7 +6123,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_ftp order by application ;
 		alter table sauvegarde_ftp order by uname ;
@@ -6240,7 +6241,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_ftps order by application ;
 				alter table sauvegarde_ftps order by uname ;
@@ -6264,7 +6265,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_ftps ( uname, serveur, port, dossier, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , '$VARSAISI19' , 'oui' , 'non' , 'mysql' ) ;
@@ -6289,7 +6290,7 @@ case $valret in
 			fi 
 
 		else
-		
+
 			cat <<- EOF > $fichtemp
 			update sauvegarde_ftps
 			set cron_activer='non', erreur='oui'
@@ -6299,7 +6300,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_ftps order by application ;
 			alter table sauvegarde_ftps order by uname ;
@@ -6315,7 +6316,7 @@ case $valret in
 		fi
 
 	else
-	
+
 		cat <<- EOF > $fichtemp
 		update sauvegarde_ftps
 		set cron_activer='non', erreur='oui'
@@ -6325,7 +6326,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_ftps order by application ;
 		alter table sauvegarde_ftps order by uname ;
@@ -6387,7 +6388,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_ftps order by application ;
 				alter table sauvegarde_ftps order by uname ;
@@ -6411,7 +6412,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_ftps ( uname, serveur, port, dossier, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , '$VARSAISI19' , 'non' , 'non' , 'mysql' ) ;
@@ -6436,7 +6437,7 @@ case $valret in
 			fi
 
 		else
-		
+
 			cat <<- EOF > $fichtemp
 			update sauvegarde_ftps
 			set cron_activer='non', erreur='oui'
@@ -6446,7 +6447,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_ftps order by application ;
 			alter table sauvegarde_ftps order by uname ;
@@ -6462,7 +6463,7 @@ case $valret in
 		fi
 
 	else
-		
+
 		cat <<- EOF > $fichtemp
 		update sauvegarde_ftps
 		set cron_activer='non', erreur='oui'
@@ -6472,7 +6473,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_ftps order by application ;
 		alter table sauvegarde_ftps order by uname ;
@@ -6576,7 +6577,7 @@ case $valret in
 		if grep "bye" verification-connexion-sftp.txt &>/dev/null ; then
 
 			if [ "$resultat" -ge "$SAUVEGARDE_SIMULTANE" ] ; then
-				
+
 				cat <<- EOF > $fichtemp
 				update sauvegarde_sftp
 				set cron_activer='non', erreur='oui'
@@ -6586,7 +6587,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_sftp order by application ;
 				alter table sauvegarde_sftp order by uname ;
@@ -6612,7 +6613,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_sftp ( uname, serveur, port, dossier, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , '$VARSAISI19' , 'oui' , 'non' , 'mysql' ) ;
@@ -6639,7 +6640,7 @@ case $valret in
 			fi
 
 		else
-		
+
 			cat <<- EOF > $fichtemp
 			update sauvegarde_sftp
 			set cron_activer='non', erreur='oui'
@@ -6649,7 +6650,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_sftp order by application ;
 			alter table sauvegarde_sftp order by uname ;
@@ -6667,7 +6668,7 @@ case $valret in
 		fi
 
 	else
-	
+
 		cat <<- EOF > $fichtemp
 		update sauvegarde_sftp
 		set cron_activer='non', erreur='oui'
@@ -6677,7 +6678,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_sftp order by application ;
 		alter table sauvegarde_sftp order by uname ;
@@ -6725,7 +6726,7 @@ case $valret in
 		if grep "bye" verification-connexion-sftp.txt &>/dev/null ; then
 
 			if [ "$resultat" -ge "$SAUVEGARDE_SIMULTANE" ] ; then
-				
+
 				cat <<- EOF > $fichtemp
 				update sauvegarde_sftp
 				set cron_activer='non', erreur='oui'
@@ -6735,7 +6736,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				alter table sauvegarde_sftp order by application ;
 				alter table sauvegarde_sftp order by uname ;
@@ -6750,7 +6751,7 @@ case $valret in
 				creation_fichier_cron_sauvegarde
 				message_erreur_sauvegarde_simultane
 				menu_configuration_sauvegarde_mysql_ftp_ftps_sftp
-			
+
 			else
 
 				cat <<- EOF > $fichtemp
@@ -6761,7 +6762,7 @@ case $valret in
 				mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 				rm -f $fichtemp
-	
+
 				cat <<- EOF > $fichtemp
 				insert into sauvegarde_sftp ( uname, serveur, port, dossier, utilisateur, password, heures, minutes, jours, retentions, purges, cron_activer, erreur, application )
 				values ( '`uname -n`' , '$VARSAISI10' , '$VARSAISI11' , '$VARSAISI12' , '$VARSAISI13' , '$VARSAISI14' , '$VARSAISI15' , '$VARSAISI16' , '$VARSAISI17' , '$VARSAISI18' , '$VARSAISI19' , 'non' , 'non' , 'mysql' ) ;
@@ -6786,8 +6787,9 @@ case $valret in
 				creation_fichier_cron_sauvegarde
 				creation_execution_script_purge_sftp
 			fi
+
 		else
-		
+
 			cat <<- EOF > $fichtemp
 			update sauvegarde_sftp
 			set cron_activer='non', erreur='oui'
@@ -6797,7 +6799,7 @@ case $valret in
 			mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 			rm -f $fichtemp
-	
+
 			cat <<- EOF > $fichtemp
 			alter table sauvegarde_sftp order by application ;
 			alter table sauvegarde_sftp order by uname ;
@@ -6815,7 +6817,7 @@ case $valret in
 		fi
 
 	else
-		
+
 		cat <<- EOF > $fichtemp
 		update sauvegarde_sftp
 		set cron_activer='non', erreur='oui'
@@ -6825,7 +6827,7 @@ case $valret in
 		mysql -h $VAR10 -P $VAR11 -u $VAR13 -p$VAR14 $VAR12 < $fichtemp
 
 		rm -f $fichtemp
-	
+
 		cat <<- EOF > $fichtemp
 		alter table sauvegarde_sftp order by application ;
 		alter table sauvegarde_sftp order by uname ;
