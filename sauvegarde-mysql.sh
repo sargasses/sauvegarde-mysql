@@ -5016,7 +5016,7 @@ case $valret in
 	rm -f $fichtemp
 
 	cat <<- EOF > $fichtemp
-	select distinct schema_name from information_schema.SCHEMATA;
+	select distinct schema_name from information_schema.SCHEMATA ;
 	EOF
 
 	mysql -h `uname -n` -u $VARSAISI10 -p$VARSAISI11 < $fichtemp >/tmp/bases.txt
