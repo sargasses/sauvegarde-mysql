@@ -56,6 +56,19 @@ fi
 
 
 #############################################################################
+# Fonction Verification Installation Client FTP 
+#############################################################################
+
+
+if [ ! -f /usr/bin/ftp-ssl ] ; then
+	echo "Le programme ftp-ssl n'est pas installé!"
+	apt-get -y install ftp-ssl
+else
+	echo "Le programme ftp-ssl est déjà installé!"
+fi
+
+
+#############################################################################
 # Fonction Activation De La Banner Pour SSH
 #############################################################################
 
