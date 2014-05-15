@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 11-05-2014
+# Date : 15-05-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -31,7 +31,7 @@ FICHIER_PURGE_MySQL_FTP=purge_mysql_ftp.sh
 FICHIER_PURGE_MySQL_FTPS=purge_mysql_ftps.sh
 FICHIER_PURGE_MySQL_SFTP=purge_mysql_sftp.sh
 
-SAUVEGARDE_SIMULTANE=3
+SAUVEGARDE_SIMULTANE=2
 
 REPERTOIRE_CRON=/etc/cron.d
 FICHIER_CRON_SAUVEGARDE=sauvegarde_mysql
