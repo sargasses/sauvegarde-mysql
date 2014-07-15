@@ -2,7 +2,7 @@
 #
 # Copyright 2013-2014 
 # Développé par : Stéphane HACQUARD
-# Date : 15-05-2014
+# Date : 25-05-2014
 # Version 1.0
 # Pour plus de renseignements : stephane.hacquard@sargasses.fr
 
@@ -4203,7 +4203,7 @@ case $valret in
 	suppression_script_sauvegarde_reseau
 	suppression_script_sauvegarde_ftp
 	suppression_script_sauvegarde_ftps
-	suppression_script_sauvegarde_Sftp
+	suppression_script_sauvegarde_sftp
 	;;
 
  1)	# Appuyé sur Touche CTRL C
